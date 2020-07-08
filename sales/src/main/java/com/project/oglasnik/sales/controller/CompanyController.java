@@ -1,5 +1,6 @@
 package com.project.oglasnik.sales.controller;
 
+import com.project.oglasnik.sales.domain.model.CompanyId;
 import com.project.oglasnik.sales.domain.repository.CompanyRepository;
 import com.project.oglasnik.sales.domain.model.Company;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.*;
 import com.project.oglasnik.sales.domain.events.CompanyCreated;
 
+import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.util.List;
 
@@ -18,13 +20,13 @@ public class CompanyController {
     ApplicationEventPublisher eventPublisher;
 
     @RequestMapping("/companies")
-    public List<Company> getCompanies()
+    public List<Company> getAllCompanies()
     {
         return companyRepository.findAll();
     }
 
     @RequestMapping("/company/{companyId}")
-    public Company getCompany(@PathVariable int companyId) {
+    public Company getCompany(@PathVariable @NotNull CompanyId companyId) {
         return companyRepository.findByCompanyId(companyId);
     }
 
@@ -35,7 +37,7 @@ public class CompanyController {
     }
 
     @PutMapping("/company/{companyId}")
-    public void updateCompany(@PathVariable int companyId, @RequestBody Company company) {
+    public void updateCompany(@PathVariable CompanyId companyId, @RequestBody Company company) {
         Company newCompany = companyRepository.findByCompanyId(companyId);
         newCompany.setName(company.getName());
         if(company.getOccupation()!= null) {
@@ -53,7 +55,7 @@ public class CompanyController {
     }
 
     @RequestMapping(method= RequestMethod.DELETE, value="/company/{companyId}")
-    public void deleteCompany(@PathVariable int companyId, @RequestBody Company company) {
+    public void deleteCompany(@PathVariable CompanyId companyId, @RequestBody Company company) {
         Company newCompany = companyRepository.findByCompanyId(companyId);
         companyRepository.delete(newCompany);
     }

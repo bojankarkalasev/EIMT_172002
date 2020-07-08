@@ -24,10 +24,10 @@ public class VehicleController {
         return vehicleRepository.findAll();
     }
 
-    @RequestMapping("/vehicles/{VehicleId}")
-    public Vehicle getVehicle(@PathVariable int VehicleId)
+    @RequestMapping("/vehicles/{vehicleId}")
+    public Vehicle getVehicle(@PathVariable VehicleId vehicleId)
     {
-        return vehicleRepository.findByVehicleId(VehicleId);
+        return vehicleRepository.findByVehicleId(vehicleId);
     }
 
 
@@ -39,15 +39,15 @@ public class VehicleController {
 
     }
 
-    @RequestMapping(method= RequestMethod.DELETE, value="/vehicles/{VehicleId}")
-    public void deleteVehicle(@PathVariable int VehicleId) {
-        Vehicle newVehicle = vehicleRepository.findByVehicleId(VehicleId);
+    @RequestMapping(method= RequestMethod.DELETE, value="/vehicles/{vehicleId}")
+    public void deleteVehicle(@PathVariable VehicleId vehicleId) {
+        Vehicle newVehicle = vehicleRepository.findByVehicleId(vehicleId);
         vehicleRepository.delete(newVehicle);
     }
 
-    @RequestMapping(method= RequestMethod.PUT, value="/vehicles/{VehicleId}")
-    public void updateVehicle(@PathVariable int VehicleId, @RequestBody  Vehicle vehicle) {
-        Vehicle newVehicle = vehicleRepository.findByVehicleId(VehicleId);
+    @RequestMapping(method= RequestMethod.PUT, value="/vehicles/{vehicleId}")
+    public void updateVehicle(@PathVariable VehicleId vehicleId, @RequestBody  Vehicle vehicle) {
+        Vehicle newVehicle = vehicleRepository.findByVehicleId(vehicleId);
         if(vehicle.getBodyType()!= null) {
             newVehicle.setBodyType(vehicle.getBodyType());
         }
@@ -66,8 +66,6 @@ public class VehicleController {
         if(vehicle.getTransmission() != null) {
             newVehicle.setTransmission(vehicle.getTransmission());
         }
-
         vehicleRepository.save(newVehicle);
     }
-
 }

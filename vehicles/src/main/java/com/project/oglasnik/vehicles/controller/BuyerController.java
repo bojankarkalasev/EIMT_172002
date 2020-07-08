@@ -13,6 +13,7 @@ import org.springframework.context.ApplicationEventPublisher;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 public class BuyerController {
@@ -28,7 +29,7 @@ public class BuyerController {
     }
 
     @RequestMapping("/buyer/{buyerId}")
-    public Buyer getBuyer(@PathVariable int buyerId) {
+    public Buyer getBuyer(@PathVariable BuyerId buyerId) {
         return buyerRepository.findByBuyerId(buyerId);
     }
 
@@ -38,7 +39,7 @@ public class BuyerController {
     }
 
     @PutMapping("/buyer/{buyerId}")
-    public void updateBuyer(@PathVariable int buyerId, @RequestBody Buyer buyer) {
+    public void updateBuyer(@PathVariable BuyerId buyerId, @RequestBody Buyer buyer) {
         Buyer newBuyer = buyerRepository.findByBuyerId(buyerId);
         newBuyer.setFirstName(buyer.getFirstName());
         newBuyer.setLastName(buyer.getLastName());
@@ -58,14 +59,16 @@ public class BuyerController {
     }
 
     @RequestMapping(method= RequestMethod.DELETE, value="/buyer/{buyerId}")
-    public void deleteBuyer(@PathVariable int buyerId, @RequestBody Buyer buyer) {
+    public void deleteBuyer(@PathVariable BuyerId buyerId, @RequestBody Buyer buyer) {
         Buyer newBuyer = buyerRepository.findByBuyerId(buyerId);
         buyerRepository.delete(newBuyer);
     }
 
     @PutMapping("/buyer/{buyerId}/addfavourite/{vechicleId}")
-    public void addFavourite(@PathVariable BuyerId buyerId, @PathVariable VehicleId vehicleId, @RequestBody Buyer buyer, @RequestBody Vehicle vehicle) {
+    public void addFavourite(@PathVariable BuyerId buyerId, @PathVariable VehicleId vehicleId, @RequestBody Vehicle vehicle) {
         eventPublisher.publishEvent(new VehicleAddedByBuyer(vehicleId, buyerId, Instant.now()));
-
+        Set<Buyer> buyers = vehicle.getBuyers();
+        buyers.add(buyerRepository.findByBuyerId(buyerId));
+        vehicle.setBuyers(buyers);
     }
 }

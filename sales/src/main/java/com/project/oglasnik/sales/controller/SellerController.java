@@ -1,5 +1,6 @@
 package com.project.oglasnik.sales.controller;
 
+import com.project.oglasnik.sales.domain.model.SellerId;
 import com.project.oglasnik.sales.domain.repository.SellerRepository;
 import com.project.oglasnik.sales.domain.model.Seller;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class SellerController {
     }
 
     @RequestMapping("/seller/{sellerId}")
-    public Seller getSeller (@PathVariable int sellerId) {
+    public Seller getSeller (@PathVariable SellerId sellerId) {
         return sellerRepository.findBySellerId(sellerId);
     }
 
@@ -35,7 +36,7 @@ public class SellerController {
     }
 
     @PutMapping("/seller/{sellerId}")
-    public void updateSeller (@PathVariable int sellerId, @RequestBody Seller seller) {
+    public void updateSeller (@PathVariable SellerId sellerId, @RequestBody Seller seller) {
         Seller newSeller = sellerRepository.findBySellerId(sellerId);
         newSeller.setFirstName(seller.getFirstName());
         newSeller.setLastName(seller.getLastName());
@@ -49,7 +50,7 @@ public class SellerController {
     }
 
     @RequestMapping(method= RequestMethod.DELETE, value="/seller/{sellerId}")
-    public void deleteSeller (@PathVariable int sellerId, @RequestBody Seller seller) {
+    public void deleteSeller (@PathVariable SellerId sellerId, @RequestBody Seller seller) {
         Seller newSeller = sellerRepository.findBySellerId(sellerId);
         sellerRepository.delete(newSeller);
     }
