@@ -41,6 +41,9 @@ public class Company extends AbstractEntity<CompanyId> {
     @OneToMany(mappedBy="company", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<Seller> sellers;
 
+    @OneToMany(mappedBy="company", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private Set<Payment> payments;
+
     @SuppressWarnings("unused")
     private Company() {
     }
@@ -126,4 +129,8 @@ public class Company extends AbstractEntity<CompanyId> {
     public void setSellers(Set<Seller> sellers) {
         this.sellers = sellers;
     }
+
+    public Set<Payment> getPayments() { return payments; }
+
+    public void setPayments(Set<Payment> payments) { this.payments = payments; }
 }
